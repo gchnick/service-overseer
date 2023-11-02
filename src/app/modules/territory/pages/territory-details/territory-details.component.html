@@ -1,0 +1,24 @@
+<h1>Detalles del territorio: {{ territory?.number }}</h1>
+<h3>Id: {{ territory?.id }}</h3>
+<h3>Nomber: {{ territory?.label }}</h3>
+<h3>Disponible: {{ !territory?.isLocked }}</h3>
+<h3>Ultima vez que se cubrio: {{ territory?.lastDateCompleted | date }}</h3>
+<h3>Limites:</h3>
+<ul>
+  <li>
+    Norte:
+    {{ territory?.limits?.NORTH }}
+  </li>
+  <li>
+    Sur:
+    {{ territory?.limits?.SOUTH }}
+  </li>
+  <li>
+    Este:
+    {{ territory?.limits?.EAST }}
+  </li>
+  <li>
+    Oeste:
+    {{ territory?.limits?.WEST }}
+  </li>
+</ul>

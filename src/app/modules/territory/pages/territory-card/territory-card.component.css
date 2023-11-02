@@ -1,0 +1,16 @@
+:host {
+  display: block;
+  height: 50px;
+  height: 100px;
+  background-color: hsl(241, 61%, 71%);
+  border: 2px solid hsl(244, 65%, 18%);
+  margin-top: 10px;
+
+  display: grid;
+  place-items: center;
+  height: 100%;
+
+  &.isSelected {
+    background-color: red;
+  }
+}

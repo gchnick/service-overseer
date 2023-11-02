@@ -1,0 +1,19 @@
+<section class="Territory-cards">
+  <article *ngFor="let territory of territories$ | async; trackBy: trackByFn">
+    <app-territory-card
+      [id]="territory.id"
+      [number]="territory.number"
+      [label]="territory.label"
+      [isSelected]="territoryToDetail()?.number === territory.number"
+      (selected)="onSelected($event)" />
+  </article>
+</section>
+<section class="Territory-details">
+  <app-territory-details
+    *ngIf="territoryToDetail()"
+    [territory]="territoryToDetail()" />
+</section>
+
+<dialog #dialog class="Territory-dialog">
+  <app-territory-form (returnValue)="returnValueForm($event)" />
+</dialog>

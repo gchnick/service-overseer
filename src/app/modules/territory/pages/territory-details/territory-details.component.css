@@ -1,0 +1,8 @@
+:host {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  background-color: chocolate;
+  height: 100%;
+}

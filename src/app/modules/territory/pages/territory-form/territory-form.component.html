@@ -1,0 +1,37 @@
+<form class="Form" method="dialog" [formGroup]="form">
+  <h1>Crear nuevo territorio</h1>
+  <h3>Ingrese informacion para registrar un nuevo territorio</h3>
+  <label>
+    Nombre:
+    <input type="text" name="label" formControlName="label" />
+  </label>
+  <label>
+    Numero:
+    <input type="number" name="number" formControlName="number" />
+  </label>
+  <label>
+    Ultima vez que se completo de predicar
+    <input
+      type="date"
+      name="lastDateAssigned"
+      formControlName="lastDateCompleted" />
+  </label>
+  <fieldset formGroupName="limits">
+    <legend>Limites del territorio</legend>
+    <label>
+      Norte:
+      <input type="text" name="north" formControlName="NORTH" /> </label
+    ><label>
+      Sur:
+      <input type="text" name="south" formControlName="SOUTH" /> </label
+    ><label>
+      Este:
+      <input type="text" name="east" formControlName="EAST" /> </label
+    ><label>
+      Oeste:
+      <input type="text" name="west" formControlName="WEST" />
+    </label>
+  </fieldset>
+  <button value="cancel">Cancelar</button>
+  <button [disabled]="form.invalid" (click)="createOnClick()">Crear</button>
+</form>
