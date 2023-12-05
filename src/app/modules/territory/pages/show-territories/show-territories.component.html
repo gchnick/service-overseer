@@ -1,9 +1,9 @@
 <section class="Territory-cards">
   @for (territory of territories$ | async; track territory.id) {
     <app-territory-card
-      [id]="territory.id"
       [number]="territory.number"
-      [label]="territory.label"
+      [name]="territory.label"
+      [lastDateCompleted]="territory.lastDateCompleted"
       [selected]="territoryToDetail()?.number === territory.number"
       (cardClick)="onCardClick($event)" />
   } @empty {
