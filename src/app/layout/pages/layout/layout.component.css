@@ -4,20 +4,16 @@
     100vh /
     var(--navigator-width) 3fr;
   grid-template-areas: 'navigator content content content';
-}
 
-.Desktop-navigator {
-  grid-area: navigator;
-  border: 1px solid rgb(24, 22, 22);
-  background-color: #cecece;
-}
+  & .Desktop-navigator {
+    grid-area: navigator;
+    width: var(--navigator-width);
+  }
 
-.Desktop-content {
-  grid-area: content;
-  scroll-behavior: smooth;
-  height: 100%;
-  overflow: hidden;
-
-  border: 1px solid hsl(273, 86%, 14%);
-  background-color: #eeb4ff91;
+  & .Desktop-content {
+    grid-area: content;
+    scroll-behavior: smooth;
+    height: 100%;
+    overflow: hidden;
+  }
 }

@@ -1,37 +1,113 @@
-<form class="Form" method="dialog" [formGroup]="form">
-  <h1>Crear nuevo territorio</h1>
-  <h3>Ingrese informacion para registrar un nuevo territorio</h3>
-  <label>
-    Nombre:
-    <input type="text" name="label" formControlName="label" />
-  </label>
-  <label>
-    Numero:
-    <input type="number" name="number" formControlName="number" />
-  </label>
-  <label>
-    Ultima vez que se completo de predicar
-    <input
-      type="date"
-      name="lastDateAssigned"
-      formControlName="lastDateCompleted" />
-  </label>
-  <fieldset formGroupName="limits">
-    <legend>Limites del territorio</legend>
-    <label>
-      Norte:
-      <input type="text" name="north" formControlName="NORTH" /> </label
-    ><label>
-      Sur:
-      <input type="text" name="south" formControlName="SOUTH" /> </label
-    ><label>
-      Este:
-      <input type="text" name="east" formControlName="EAST" /> </label
-    ><label>
-      Oeste:
-      <input type="text" name="west" formControlName="WEST" />
-    </label>
-  </fieldset>
-  <button value="cancel">Cancelar</button>
-  <button [disabled]="form.invalid" (click)="createOnClick()">Crear</button>
+<form class="Form" [formGroup]="form">
+  @if (path() === 1) {
+    <ng-container formGroupName="basic">
+      <ui-textfield
+        variant="Outlined"
+        type="text"
+        label="Nombre"
+        placeholder="Nombre del territorio"
+        supportingText="Debe tener 3 letras como mínimo"
+        [invalid]="
+          form.controls.basic.controls.label.invalid &&
+          form.controls.basic.controls.label.touched
+        "
+        formControlName="label" />
+      <ui-textfield
+        variant="Outlined"
+        type="number"
+        label="Número"
+        placeholder="Número del territorio"
+        supportingText="Debe ser mayor a 0 y menor que 100"
+        [invalid]="
+          form.controls.basic.controls.number.invalid &&
+          form.controls.basic.controls.number.touched
+        "
+        formControlName="number" />
+      <ui-textfield
+        variant="Outlined"
+        type="date"
+        label="Última vez que se completo"
+        supportingText="Debe ser una fecha pasada"
+        [invalid]="
+          form.controls.basic.controls.lastDateCompleted.invalid &&
+          form.controls.basic.controls.lastDateCompleted.touched
+        "
+        formControlName="lastDateCompleted" />
+    </ng-container>
+  } @else {
+    <ng-container formGroupName="limits">
+      <ui-textfield
+        variant="Outlined"
+        type="text"
+        label="Norte"
+        placeholder="Límites por el norte"
+        supportingText="Debe tener un máximo de 255 carácteres"
+        [invalid]="
+          form.controls.limits.controls.NORTH.invalid &&
+          form.controls.limits.controls.NORTH.touched
+        "
+        formControlName="NORTH" />
+      <ui-textfield
+        variant="Outlined"
+        type="text"
+        label="Sur"
+        placeholder="Límites por el sur"
+        supportingText="Debe tener un máximo de 255 carácteres"
+        [invalid]="
+          form.controls.limits.controls.SOUTH.invalid &&
+          form.controls.limits.controls.SOUTH.touched
+        "
+        formControlName="SOUTH" />
+      <ui-textfield
+        variant="Outlined"
+        type="text"
+        label="Este"
+        placeholder="Límites por el este"
+        supportingText="Debe tener un máximo de 255 carácteres"
+        [invalid]="
+          form.controls.limits.controls.EAST.invalid &&
+          form.controls.limits.controls.EAST.touched
+        "
+        formControlName="EAST" />
+      <ui-textfield
+        variant="Outlined"
+        type="text"
+        label="Oeste"
+        placeholder="Límites por el oeste"
+        supportingText="Debe tener un máximo de 255 carácteres"
+        [invalid]="
+          form.controls.limits.controls.WEST.invalid &&
+          form.controls.limits.controls.WEST.touched
+        "
+        formControlName="WEST" />
+    </ng-container>
+  }
+
+  <footer uiDialogActions>
+    @if (path() === 1) {
+      <ui-button
+        variant="Outlined"
+        type="button"
+        text="Cancelar"
+        (click)="onClose(false)" />
+      <ui-button
+        variant="Filled"
+        type="button"
+        text="Siguiente"
+        [disabled]="form.controls.basic.invalid"
+        (click)="onClickNext()" />
+    } @else {
+      <ui-button
+        variant="Outlined"
+        type="button"
+        text="Anterior"
+        (click)="onClickBack()" />
+      <ui-button
+        variant="Filled"
+        type="button"
+        text="Enviar"
+        [disabled]="form.invalid"
+        (click)="onClose(true)" />
+    }
+  </footer>
 </form>

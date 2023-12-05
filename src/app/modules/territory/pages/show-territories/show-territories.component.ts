@@ -1,14 +1,17 @@
 import {
+  ChangeDetectionStrategy,
   Component,
-  ElementRef,
+  OnDestroy,
   OnInit,
-  ViewChild,
   inject,
   signal,
 } from '@angular/core';
-import { UiEventEmitter } from '@nikosoftware/core-ui/event-emitter';
-import { TerritoryService } from '../../services/territory.service';
-import { TerritoryReturnValue } from '../territory-form/territory-form.component';
+import { Fab, ReturnValue } from '@nikosoftware/core-ui';
+import { UiEventEmitterService } from '@nikosoftware/core-ui/event-emitter';
+import {
+  TerritoryRequest,
+  TerritoryService,
+} from '../../services/territory.service';
 
 enum Days {
   MONDAY = 'MONDAY',
@@ -64,46 +67,49 @@ export type Territory = {
   meetingPlaces?: MeetingPlace[];
 };
 
+const fabs: Fab[] = [
+  {
+    size: 'extended',
+    color: 'primary',
+    icon: 'add',
+    label: 'Nuevo territorio',
+    eventName: 'app.territory.new.dialog.open',
+    tooltop: 'Crear un nuevo territorio',
+  },
+];
+
 @Component({
   selector: 'app-show-territories',
   templateUrl: './show-territories.component.html',
   styleUrls: ['./show-territories.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ShowTerritoriesComponent implements OnInit {
-  @ViewChild('dialog', { static: true }) dialog!: ElementRef<HTMLDialogElement>;
-  territoryToDetail = signal<Territory | undefined>(undefined);
-
+export class ShowTerritoriesComponent implements OnInit, OnDestroy {
   readonly #territoryService = inject(TerritoryService);
-  readonly #eventEmitter = inject(UiEventEmitter);
+  readonly #eventEmitter = inject(UiEventEmitterService);
 
+  territoryToDetail = signal<Territory | undefined>(undefined);
   territories$ = this.#territoryService.getAll();
 
-  #showModal = () => {
-    const dialog = this.dialog.nativeElement;
-    dialog.showModal();
-  };
-
   ngOnInit(): void {
-    this.#initEventListener();
+    this.#eventEmitter.emit('core.ui.navigation.fabs.add', fabs);
   }
 
-  #initEventListener() {
-    this.#eventEmitter.on('territory.new', this.#showModal);
+  ngOnDestroy(): void {
+    this.#eventEmitter.emit('core.ui.navigation.fabs.clean');
   }
 
-  trackByFn(_: number, territory: Territory) {
-    return territory.id;
-  }
-
-  onSelected(number: number) {
+  onCardClick(number: number) {
     this.#territoryService.getOne(number).subscribe(t => {
       this.territoryToDetail.set(t ?? undefined);
     });
   }
 
-  returnValueForm(value: TerritoryReturnValue) {
-    this.#territoryService
-      .create(value)
-      .subscribe(response => console.log(response)); // TODO: System of Notification
+  onReturnValue({ success, data }: ReturnValue) {
+    if (success) {
+      this.#territoryService
+        .create(data as TerritoryRequest)
+        .subscribe(response => console.log(response)); // TODO: System of Notification
+    }
   }
 }

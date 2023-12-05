@@ -1,19 +1,29 @@
 <section class="Territory-cards">
-  <article *ngFor="let territory of territories$ | async; trackBy: trackByFn">
+  @for (territory of territories$ | async; track territory.id) {
     <app-territory-card
       [id]="territory.id"
       [number]="territory.number"
       [label]="territory.label"
-      [isSelected]="territoryToDetail()?.number === territory.number"
-      (selected)="onSelected($event)" />
-  </article>
+      [selected]="territoryToDetail()?.number === territory.number"
+      (cardClick)="onCardClick($event)" />
+  } @empty {
+    Crea un territorio para comenzar
+  }
 </section>
 <section class="Territory-details">
-  <app-territory-details
-    *ngIf="territoryToDetail()"
-    [territory]="territoryToDetail()" />
+  @defer (when territoryToDetail()) {
+    <app-territory-details [territory]="territoryToDetail()" />
+  } @placeholder {
+    Seleccione un territorio
+  }
 </section>
 
-<dialog #dialog class="Territory-dialog">
-  <app-territory-form (returnValue)="returnValueForm($event)" />
-</dialog>
+<ui-dialog
+  icon="map"
+  headline="Crear nuevo territorio"
+  supportingText="Ingrese informacion para registrar un nuevo territorio"
+  openEventName="app.territory.new.dialog.open"
+  closeEventName="app.territory.new.dialog.close"
+  (returnValue)="onReturnValue($event)">
+  <app-territory-form />
+</ui-dialog>

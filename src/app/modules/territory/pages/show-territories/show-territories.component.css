@@ -2,15 +2,19 @@
   display: grid;
   grid-template:
     100vh /
-    1fr 2fr;
+    4fr 5fr;
   grid-template-areas: 'cards details';
 }
 
 .Territory-cards {
   grid-area: cards;
-  /* display: flex;
-  flex-flow: column nowrap; */
-  background-color: brown;
+  display: grid;
+  padding: 10px 0;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-content: space-around;
+  align-content: space-between;
+  justify-items: center;
+  gap: 10px;
   overflow: hidden;
   overflow-y: auto;
 }

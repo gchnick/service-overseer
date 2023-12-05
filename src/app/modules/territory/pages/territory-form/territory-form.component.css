@@ -1,20 +1,7 @@
 .Form {
-  padding: 10px;
-
-  & h1 {
-    text-align: center;
-  }
-
-  & h3 {
-    padding-bottom: 20px;
-  }
-
-  & label {
-    display: block;
-  }
-
-  & button {
-    padding: 10px;
-    margin-top: 20px;
-  }
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 35px;
+  padding: 0 20px;
 }

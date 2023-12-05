@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, catchError, of, throwError } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../../environments/environment';
 import { Territory } from '../pages/show-territories/show-territories.component';
-import { TerritoryReturnValue } from '../pages/territory-form/territory-form.component';
-import { TerritoryService } from '../services/territory.service';
+import {
+  TerritoryRequest,
+  TerritoryService,
+} from '../services/territory.service';
 
 @Injectable({ providedIn: 'root' })
 export class TerritoryNode extends TerritoryService {
@@ -27,7 +29,7 @@ export class TerritoryNode extends TerritoryService {
     );
   }
 
-  create(territory: TerritoryReturnValue): Observable<Territory> {
+  create(territory: TerritoryRequest): Observable<Territory> {
     return this.#http.post<Territory>(this.#BASE_URL, territory);
   }
 }

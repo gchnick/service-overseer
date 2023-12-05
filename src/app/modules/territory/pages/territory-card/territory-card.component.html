@@ -1,2 +1,5 @@
-<h1>Numero: {{ number }}</h1>
-<h2>{{ label }}</h2>
+<ui-card
+  class="TerritoryCard-card"
+  variant="outlined"
+  [avatar]="{ header: number.toString() }"
+  [headline]="label"></ui-card>

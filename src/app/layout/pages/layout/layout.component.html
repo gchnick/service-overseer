@@ -1,9 +1,4 @@
-<div class="Desktop-navigator">
-  <button (click)="onClick()">Nuevo territorio</button>
-  <nav>
-    <a routerLink="/territory">Territorios</a>
-  </nav>
-</div>
+<ui-navdrawer class="Desktop-navigator" [sections]="menu" />
 <main class="Desktop-content">
   <router-outlet></router-outlet>
 </main>

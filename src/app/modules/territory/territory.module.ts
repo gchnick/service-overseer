@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { HttpClientModule } from '@angular/common/http';
+import { UiDialogComponent } from '@nikosoftware/core-ui';
 import { TerritoryNode } from './adapters/territory-node';
 import { ShowTerritoriesComponent } from './pages/show-territories/show-territories.component';
 import { TerritoryCardComponent } from './pages/territory-card/territory-card.component';
@@ -18,7 +18,7 @@ import { TerritoryRoutingModule } from './territory-routing.module';
     TerritoryCardComponent,
     TerritoryDetailsComponent,
     TerritoryFormComponent,
-    HttpClientModule,
+    UiDialogComponent,
   ],
   providers: [{ useClass: TerritoryNode, provide: TerritoryService }],
 })
