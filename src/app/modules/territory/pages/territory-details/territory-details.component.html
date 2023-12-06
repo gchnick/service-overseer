@@ -1,14 +1,35 @@
-<ui-card
-  class="TerritoryDetails-card"
-  variant="outlined"
-  headline="Detalles del territorio: {{ territory?.number }}"
-  subhead="Ultima vez que se cubrio: {{ territory?.lastDateCompleted | date }}">
-  <section class="TerritoryDetails-body" ngProjectAs="Card-media">
-    <ui-tab
-      type="primary"
-      [blocks]="blocks"
-      (selected)="onSelectedTab($event)" />
-
+<ui-card class="TerritoryDetails-card" variant="filled">
+  <header class="TerritoryDetails-header" ngProjectAs="Card-header">
+    <ui-typescale
+      class="TerritoryDetails-title"
+      style="display: inline"
+      type="title"
+      size="large"
+      [text]="territory!.label" />
+    <div class="TerritoryDetails-trailingIcons">
+      <ui-icon-button
+        type="standard"
+        tooltip="Editar información"
+        icon="edit_fill" />
+      <ui-icon-button type="standard" tooltip="Más opciones" icon="more_vert" />
+    </div>
+  </header>
+  <section class="TerritoryDetails-map">
+    @if (territory!.urlMapImage) {
+      <img
+        class="TerritoryDetails-mapImage"
+        [ngSrc]="territory!.urlMapImage"
+        alt="Mapa del territorio número {{ territory!.number }}, {{
+          territory!.label
+        }}"
+        fill
+        priority />
+    } @else {
+      <app-empty icon="map_fill" label="Mapa del territorio en construcción" />
+    }
+  </section>
+  <ui-tab type="primary" [blocks]="tabs" (selected)="onSelectedTab($event)" />
+  <section class="TerritoryDetails-content">
     @switch (selectedTab()) {
       @case ('limits') {
         <ui-typescale
@@ -33,7 +54,7 @@
                 style="display: inline"
                 type="body"
                 size="small"
-                text="{{ territory?.limits?.NORTH }}" />
+                text="{{ territory!.limits.NORTH }}" />
             </li>
             <li class="TerritoryDetails-limit">
               <ui-typescale
@@ -45,7 +66,7 @@
                 style="display: inline"
                 type="body"
                 size="small"
-                text="{{ territory?.limits?.SOUTH }}" />
+                text="{{ territory!.limits.SOUTH }}" />
             </li>
             <li class="TerritoryDetails-limit">
               <ui-typescale
@@ -57,7 +78,7 @@
                 style="display: inline"
                 type="body"
                 size="small"
-                text="{{ territory?.limits?.EAST }}" />
+                text="{{ territory!.limits.EAST }}" />
             </li>
             <li class="TerritoryDetails-limit">
               <ui-typescale
@@ -69,7 +90,7 @@
                 style="display: inline"
                 type="body"
                 size="small"
-                text="{{ territory?.limits?.WEST }}" />
+                text="{{ territory!.limits.WEST }}" />
             </li>
           </ul>
         </div>
@@ -85,7 +106,7 @@
             style="display: inline"
             type="body"
             size="small"
-            text="{{ territory?.id }}" />
+            text="{{ territory!.id }}" />
         </div>
         <div>
           <ui-typescale
@@ -97,7 +118,7 @@
             style="display: inline"
             type="body"
             size="small"
-            text="{{ territory?.label }}" />
+            text="{{ territory!.label }}" />
         </div>
         <div>
           <ui-typescale
@@ -109,7 +130,7 @@
             style="display: inline"
             type="body"
             size="small"
-            text="{{ !territory?.isLocked }}" />
+            text="{{ !territory!.isLocked }}" />
         </div>
       }
       @case ('report') {

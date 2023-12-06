@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { UiDialogComponent } from '@nikosoftware/core-ui';
+import { UiDialogComponent, UiRippleDirective } from '@nikosoftware/core-ui';
 import { TerritoryNode } from './adapters/territory-node';
+import { EmptyComponent } from './pages/empty/empty.component';
 import { ShowTerritoriesComponent } from './pages/show-territories/show-territories.component';
 import { TerritoryCardComponent } from './pages/territory-card/territory-card.component';
 import { TerritoryDetailsComponent } from './pages/territory-details/territory-details.component';
@@ -19,6 +20,8 @@ import { TerritoryRoutingModule } from './territory-routing.module';
     TerritoryDetailsComponent,
     TerritoryFormComponent,
     UiDialogComponent,
+    UiRippleDirective,
+    EmptyComponent,
   ],
   providers: [{ useClass: TerritoryNode, provide: TerritoryService }],
 })

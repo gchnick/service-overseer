@@ -1,13 +1,15 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  OnDestroy,
+  DestroyRef,
   OnInit,
   inject,
   signal,
 } from '@angular/core';
-import { Fab, ReturnValue } from '@nikosoftware/core-ui';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Fab, RegistryIconService, ReturnValue } from '@nikosoftware/core-ui';
 import { UiEventEmitterService } from '@nikosoftware/core-ui/event-emitter';
+import { uiIconHomePin } from '@nikosoftware/core-ui/svg-icons';
 import {
   TerritoryRequest,
   TerritoryService,
@@ -84,32 +86,53 @@ const fabs: Fab[] = [
   styleUrls: ['./show-territories.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ShowTerritoriesComponent implements OnInit, OnDestroy {
+export class ShowTerritoriesComponent implements OnInit {
   readonly #territoryService = inject(TerritoryService);
+  readonly #registryIconService = inject(RegistryIconService);
   readonly #eventEmitter = inject(UiEventEmitterService);
+  readonly #destroyRef = inject(DestroyRef);
 
-  territoryToDetail = signal<Territory | undefined>(undefined);
-  territories$ = this.#territoryService.getAll();
+  territories = signal<Territory[]>([]);
+  toDetails = signal<Territory | undefined>(undefined);
 
   ngOnInit(): void {
-    this.#eventEmitter.emit('core.ui.navigation.fabs.add', fabs);
+    this.#registryIcons();
+    this.#addAndRemoveFabsToCoreUiNavitation();
+    this.#initTerritoriesList();
   }
 
-  ngOnDestroy(): void {
-    this.#eventEmitter.emit('core.ui.navigation.fabs.clean');
+  #registryIcons() {
+    this.#registryIconService.registerIcons([uiIconHomePin]);
+  }
+
+  #addAndRemoveFabsToCoreUiNavitation() {
+    this.#eventEmitter.emit('core.ui.navigation.fabs.add', fabs);
+    this.#destroyRef.onDestroy(() => {
+      this.#eventEmitter.emit('core.ui.navigation.fabs.clean');
+    });
+  }
+
+  #initTerritoriesList() {
+    this.#territoryService
+      .getAll()
+      .pipe(takeUntilDestroyed(this.#destroyRef))
+      .subscribe(t => {
+        this.territories.set(t);
+      });
   }
 
   onCardClick(number: number) {
-    this.#territoryService.getOne(number).subscribe(t => {
-      this.territoryToDetail.set(t ?? undefined);
-    });
+    const toDetails = this.territories().find(t => t.number === number);
+    this.toDetails.set(toDetails);
   }
 
   onReturnValue({ success, data }: ReturnValue) {
     if (success) {
       this.#territoryService
         .create(data as TerritoryRequest)
-        .subscribe(response => console.log(response)); // TODO: System of Notification
+        .subscribe(newTerritory => {
+          this.territories.update(t => [...t, newTerritory]);
+        });
     }
   }
 }

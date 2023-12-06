@@ -1,27 +1,35 @@
 <section class="Territory-cards">
-  @for (territory of territories$ | async; track territory.id) {
+  @for (territory of territories(); track territory.id) {
     <app-territory-card
+      class="Territory-card"
       [number]="territory.number"
       [name]="territory.label"
       [lastDateCompleted]="territory.lastDateCompleted"
-      [selected]="territoryToDetail()?.number === territory.number"
-      (cardClick)="onCardClick($event)" />
+      [selected]="toDetails()?.number === territory.number"
+      (cardClick)="onCardClick($event)"
+      uiRipple
+      [diameter]="300" />
   } @empty {
-    Crea un territorio para comenzar
+    <app-empty
+      class="Territory-empty"
+      icon="home_pin"
+      label="Crea un territorio para comenzar" />
   }
 </section>
-<section class="Territory-details">
-  @defer (when territoryToDetail()) {
-    <app-territory-details [territory]="territoryToDetail()" />
-  } @placeholder {
-    Seleccione un territorio
-  }
-</section>
+@if (territories().length > 0) {
+  <section class="Territory-details">
+    @defer (when toDetails()) {
+      <app-territory-details [territory]="toDetails()" />
+    } @placeholder {
+      <app-empty icon="map" label="Selecciona un territorio" />
+    }
+  </section>
+}
 
 <ui-dialog
   icon="map"
-  headline="Crear nuevo territorio"
-  supportingText="Ingrese informacion para registrar un nuevo territorio"
+  headline="Crear un nuevo territorio"
+  supportingText="Rellene los campos de este formulario para crear un nuevo territorio"
   openEventName="app.territory.new.dialog.open"
   closeEventName="app.territory.new.dialog.close"
   (returnValue)="onReturnValue($event)">

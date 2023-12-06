@@ -1,9 +1,0 @@
-:host {
-  display: grid;
-  place-items: center;
-  height: 100%;
-
-  &.is-selected .TerritoryCard-card {
-    background-color: red;
-  }
-}
