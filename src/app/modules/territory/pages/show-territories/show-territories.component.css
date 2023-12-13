@@ -27,10 +27,4 @@
   & .Territory-details {
     grid-area: details;
   }
-
-  & .Territory-dialog {
-    position: absolute;
-    inset: 0;
-    margin: auto;
-  }
 }

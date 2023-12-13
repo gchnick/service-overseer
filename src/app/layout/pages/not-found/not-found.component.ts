@@ -18,7 +18,7 @@ import { uiIconHome } from '@nikosoftware/core-ui/svg-icons';
       [text]="message" />
     <ui-button
       class="NotFound-button"
-      variant="Outlined"
+      variant="outlined"
       type="button"
       icon="home"
       text="Volver al inicio"

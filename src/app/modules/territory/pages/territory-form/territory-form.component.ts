@@ -1,13 +1,7 @@
+import { Component, inject, signal } from '@angular/core';
 import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  signal,
-} from '@angular/core';
-import {
+  FormBuilder,
   FormControl,
-  FormGroup,
-  NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -17,20 +11,11 @@ import {
   UiTextfieldComponent,
 } from '@nikosoftware/core-ui';
 import { UiEventEmitterService } from '@nikosoftware/core-ui/event-emitter';
-
-interface TerritoryForm {
-  basic: FormGroup<{
-    label: FormControl<string>;
-    number: FormControl<number>;
-    lastDateCompleted: FormControl<Date>;
-  }>;
-  limits: FormGroup<{
-    NORTH: FormControl<string>;
-    SOUTH: FormControl<string>;
-    EAST: FormControl<string>;
-    WEST: FormControl<string>;
-  }>;
-}
+import { TerritoryService } from '../../services/territory.service';
+import { NewTerritoryEvents } from '../show-territories/events/new-territory';
+import { errorsDictionary } from './errors.dictionary';
+import { checkNumberIsAvailableValidator } from './validators/check-number-is-available.validator';
+import { pastDateValidator } from './validators/past-date.validator';
 
 @Component({
   selector: 'app-territory-form',
@@ -43,14 +28,14 @@ interface TerritoryForm {
   ],
   templateUrl: './territory-form.component.html',
   styleUrls: ['./territory-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TerritoryFormComponent {
-  readonly #fb = inject(NonNullableFormBuilder);
+  readonly #fb = inject(FormBuilder);
+  readonly #territoryService = inject(TerritoryService);
   readonly #eventEmitter = inject(UiEventEmitterService);
-  path = signal(1);
+  step = signal(1);
 
-  form = this.#fb.group<TerritoryForm>({
+  form = this.#fb.group({
     basic: this.#fb.group({
       label: [
         '',
@@ -60,8 +45,24 @@ export class TerritoryFormComponent {
           Validators.maxLength(255),
         ],
       ],
-      number: [0, [Validators.min(1), Validators.max(100)]],
-      lastDateCompleted: [new Date(), [Validators.required]], // TODO: NoFutereDate
+      number: [
+        null,
+        {
+          validators: [
+            Validators.required,
+            Validators.min(1),
+            Validators.max(100),
+          ],
+          asyncValidators: checkNumberIsAvailableValidator(
+            this.#territoryService
+          ),
+          updateOn: 'blur',
+        },
+      ],
+      lastDateCompleted: [
+        null,
+        { validators: [Validators.required, pastDateValidator()] },
+      ],
     }),
     limits: this.#fb.group({
       NORTH: [
@@ -99,30 +100,56 @@ export class TerritoryFormComponent {
     }),
   });
 
+  get number() {
+    return this.form.controls.basic.controls.number;
+  }
+
+  get label() {
+    return this.form.controls.basic.controls.label;
+  }
+
+  get lastDateCompleted() {
+    return this.form.controls.basic.controls.lastDateCompleted;
+  }
+
+  get NORTH() {
+    return this.form.controls.limits.controls.NORTH;
+  }
+
+  get SOUTH() {
+    return this.form.controls.limits.controls.SOUTH;
+  }
+
+  get EAST() {
+    return this.form.controls.limits.controls.EAST;
+  }
+
+  get WEST() {
+    return this.form.controls.limits.controls.WEST;
+  }
+
+  supportingText(control: FormControl<unknown | null>): string | undefined {
+    for (const errorCode in errorsDictionary) {
+      if (control.touched && control.getError(errorCode)) {
+        return errorsDictionary[errorCode];
+      }
+    }
+    return undefined;
+  }
+
   onClickNext() {
-    this.path.set(2);
+    this.step.set(2);
   }
 
   onClickBack() {
-    this.path.set(1);
+    this.step.set(1);
   }
 
   onClose(success: boolean) {
-    this.#eventEmitter.emit('app.territory.new.dialog.close', {
+    this.#eventEmitter.emit(NewTerritoryEvents.CLOSE_DIALOG, {
       success,
       data: success
-        ? {
-            label: this.form.controls.basic.controls.label.value,
-            number: this.form.controls.basic.controls.number.value,
-            lastDateCompleted:
-              this.form.controls.basic.controls.lastDateCompleted.value,
-            limits: {
-              NORTH: this.form.controls.limits.controls.NORTH.value,
-              SOUTH: this.form.controls.limits.controls.SOUTH.value,
-              EAST: this.form.controls.limits.controls.EAST.value,
-              WEST: this.form.controls.limits.controls.WEST.value,
-            },
-          }
+        ? { ...this.form.value.basic, limits: this.form.value.limits }
         : undefined,
     });
   }

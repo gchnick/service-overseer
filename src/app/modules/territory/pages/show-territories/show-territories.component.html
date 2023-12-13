@@ -30,8 +30,9 @@
   icon="map"
   headline="Crear un nuevo territorio"
   supportingText="Rellene los campos de este formulario para crear un nuevo territorio"
-  openEventName="app.territory.new.dialog.open"
-  closeEventName="app.territory.new.dialog.close"
+  [width]="380"
+  [openEventName]="dialogEvents.OPEN_DIALOG"
+  [closeEventName]="dialogEvents.CLOSE_DIALOG"
   (returnValue)="onReturnValue($event)">
-  <app-territory-form />
+  <app-territory-form *uiDialogDestroyOn="dialogEvents.CLOSE_DIALOG" />
 </ui-dialog>

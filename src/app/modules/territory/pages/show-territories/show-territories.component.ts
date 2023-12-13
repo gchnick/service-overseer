@@ -7,67 +7,20 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Fab, RegistryIconService, ReturnValue } from '@nikosoftware/core-ui';
+import {
+  CoreEvents,
+  Fab,
+  RegistryIconService,
+  ReturnValue,
+} from '@nikosoftware/core-ui';
 import { UiEventEmitterService } from '@nikosoftware/core-ui/event-emitter';
 import { uiIconHomePin } from '@nikosoftware/core-ui/svg-icons';
+import { Territory } from '../../models/types';
 import {
   TerritoryRequest,
   TerritoryService,
 } from '../../services/territory.service';
-
-enum Days {
-  MONDAY = 'MONDAY',
-  TUESDAY = 'TUESDAY',
-  WEDNESDAY = 'WEDNESDAY',
-  THURSDAY = 'THURSDAY',
-  FRIDAY = 'FRIDAY',
-  SATURDAY = 'SATURDAY',
-  SUNDAY = 'SUNDAY',
-}
-
-enum Moments {
-  MORNING = 'MORNING',
-  AFTERNOON = 'AFTERNOON',
-  EVENING = 'EVENING',
-  NIGHT = 'NIGHT',
-}
-
-type Available = {
-  frequency: string;
-  moment: Moments;
-};
-
-type Availability = Partial<Record<Days, Available>>;
-
-enum CardinalPoint {
-  NORTH = 'NORTH',
-  SOUTH = 'SOUTH',
-  EAST = 'EAST',
-  WEST = 'WEST',
-}
-
-type MeetingPlace = {
-  id?: string;
-  place: string;
-  phone?: string;
-  latitude?: string;
-  longitude?: string;
-  fieldService: boolean;
-  availability?: Availability;
-};
-
-type Limits = Partial<Record<CardinalPoint, string>>;
-
-export type Territory = {
-  id: string;
-  number: number;
-  label: string;
-  urlMapImage?: string;
-  limits: Limits;
-  lastDateCompleted: Date;
-  isLocked: boolean;
-  meetingPlaces?: MeetingPlace[];
-};
+import { NewTerritoryEvents } from './events/new-territory';
 
 const fabs: Fab[] = [
   {
@@ -75,7 +28,7 @@ const fabs: Fab[] = [
     color: 'primary',
     icon: 'add',
     label: 'Nuevo territorio',
-    eventName: 'app.territory.new.dialog.open',
+    eventName: NewTerritoryEvents.OPEN_DIALOG,
     tooltop: 'Crear un nuevo territorio',
   },
 ];
@@ -94,6 +47,7 @@ export class ShowTerritoriesComponent implements OnInit {
 
   territories = signal<Territory[]>([]);
   toDetails = signal<Territory | undefined>(undefined);
+  dialogEvents = NewTerritoryEvents;
 
   ngOnInit(): void {
     this.#registryIcons();
@@ -106,9 +60,9 @@ export class ShowTerritoriesComponent implements OnInit {
   }
 
   #addAndRemoveFabsToCoreUiNavitation() {
-    this.#eventEmitter.emit('core.ui.navigation.fabs.add', fabs);
+    this.#eventEmitter.emit(CoreEvents.NAVIGATION_ADD_FABS, fabs);
     this.#destroyRef.onDestroy(() => {
-      this.#eventEmitter.emit('core.ui.navigation.fabs.clean');
+      this.#eventEmitter.emit(CoreEvents.NAVIGATION_CLEAN_FABS);
     });
   }
 

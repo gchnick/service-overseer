@@ -1659,10 +1659,10 @@
   resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-17.0.3.tgz#3be3358353df2cad8daad089187a6bcc2e59d0e7"
   integrity sha512-H39WQ/tM6kOErfiyU6QkPasMtuOZHbm6INkirSR3ol4e93o6gLJ0ptwg3IQlyGtZK2QexWagPC6jzsdGIaN3iw==
 
-"@nikosoftware/core-ui@^0.17.2":
-  version "0.17.2"
-  resolved "https://registry.yarnpkg.com/@nikosoftware/core-ui/-/core-ui-0.17.2.tgz#e7a712e24cde6d81dea83dc5d86ed42e90435e90"
-  integrity sha512-4XQv5ztOaZhGHRJjERV+gT0AWfo8TYqBkegIGCqBb8N0wrP9PBoNnF7OlYSBu3FF5rApSwC0G/lKNU7yKTkrpw==
+"@nikosoftware/core-ui@^0.17.12":
+  version "0.17.12"
+  resolved "https://registry.yarnpkg.com/@nikosoftware/core-ui/-/core-ui-0.17.12.tgz#8b562f7a368a28dda5b7b7249618a83d0d59cdbd"
+  integrity sha512-QexAuiyXzKM6tSftM9kxPv6RZ/VR2rZYH9dm9VFhY/6HjJ8MwI8MmoXEBczdNGrFMjes+2vQ+f8WWdKINIuF9w==
   dependencies:
     tslib "^2.3.0"
 

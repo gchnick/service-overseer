@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs';
-import { Territory } from '../pages/show-territories/show-territories.component';
+import { environment } from '../../../../environments/environment';
+import { Territory } from '../models/types';
 
 export type TerritoryRequest = Omit<
   Territory,
@@ -7,6 +8,8 @@ export type TerritoryRequest = Omit<
 >;
 
 export abstract class TerritoryService {
+  protected readonly BASE_URL = `${environment.API_BASE_URL}/territories`;
+
   abstract getAll(): Observable<Territory[]>;
 
   abstract getOne(number: number): Observable<Territory | null>;

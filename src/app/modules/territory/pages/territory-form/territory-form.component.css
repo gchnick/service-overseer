@@ -1,7 +1,10 @@
-.Form {
+.TerritoryForm-form {
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  gap: 35px;
-  padding: 0 20px;
+
+  & .TerritoryForm-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
 }

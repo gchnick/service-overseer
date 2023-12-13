@@ -23,8 +23,8 @@ import {
   uiIconMoreVert,
   uiIconPinDrop,
 } from '@nikosoftware/core-ui/svg-icons';
+import { Territory } from '../../models/types';
 import { EmptyComponent } from '../empty/empty.component';
-import { Territory } from '../show-territories/show-territories.component';
 
 type BockId = 'limits' | 'meeting-places' | 'report';
 
