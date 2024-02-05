@@ -1,0 +1,30 @@
+:host {
+  display: grid;
+  grid-template:
+    100vh /
+    2fr 5fr;
+  grid-template-areas: 'cards details';
+  position: relative;
+
+  & .Territory-cards {
+    grid-area: cards;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+    align-content: flex-start;
+    padding: 10px 10px;
+    gap: 8px;
+    overflow: hidden;
+    overflow-y: auto;
+
+    & .Territory-empty {
+      position: absolute;
+      inset: 0;
+      margin: auto;
+    }
+  }
+
+  & .Territory-details {
+    grid-area: details;
+  }
+}

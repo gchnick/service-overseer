@@ -1,0 +1,38 @@
+<section class="Territory-cards">
+  @for (territory of territories(); track territory.id) {
+    <app-territory-card
+      class="Territory-card"
+      [number]="territory.number"
+      [name]="territory.label"
+      [lastDateCompleted]="territory.lastDateCompleted"
+      [selected]="toDetails()?.number === territory.number"
+      (cardClick)="onCardClick($event)"
+      uiRipple
+      [diameter]="300" />
+  } @empty {
+    <app-empty
+      class="Territory-empty"
+      icon="home_pin"
+      label="Crea un territorio para comenzar" />
+  }
+</section>
+@if (territories().length > 0) {
+  <section class="Territory-details">
+    @defer (when toDetails()) {
+      <app-territory-details [territory]="toDetails()" />
+    } @placeholder {
+      <app-empty icon="map" label="Selecciona un territorio" />
+    }
+  </section>
+}
+
+<ui-dialog
+  icon="map"
+  headline="Crear un nuevo territorio"
+  supportingText="Rellene los campos de este formulario para crear un nuevo territorio"
+  [width]="380"
+  [openEventName]="dialogEvents.OPEN_DIALOG"
+  [closeEventName]="dialogEvents.CLOSE_DIALOG"
+  (returnValue)="onReturnValue($event)">
+  <app-territory-form *uiDialogDestroyOn="dialogEvents.CLOSE_DIALOG" />
+</ui-dialog>

@@ -1,0 +1,83 @@
+<form class="TerritoryForm-form" [formGroup]="form">
+  @if (step() === 1) {
+    <div class="TerritoryForm-content" formGroupName="basic">
+      <ui-textfield
+        variant="outlined"
+        label="Nombre"
+        placeholder="Nombre del territorio"
+        [supportingText]="supportingText(label)"
+        formControlName="label" />
+      <ui-textfield
+        variant="outlined"
+        type="number"
+        label="Número"
+        placeholder="Número del territorio"
+        [supportingText]="supportingText(number)"
+        formControlName="number" />
+      <ui-textfield
+        variant="outlined"
+        type="date"
+        label="Última vez que se completó"
+        [supportingText]="
+          supportingText(lastDateCompleted) ??
+          'Fecha de la última vez que se completó el territorio'
+        "
+        formControlName="lastDateCompleted" />
+    </div>
+  } @else {
+    <div class="TerritoryForm-content" formGroupName="limits">
+      <ui-textfield
+        variant="outlined"
+        label="Norte"
+        placeholder="Límites por el norte"
+        [supportingText]="supportingText(NORTH)"
+        formControlName="NORTH" />
+      <ui-textfield
+        variant="outlined"
+        label="Sur"
+        placeholder="Límites por el sur"
+        [supportingText]="supportingText(SOUTH)"
+        formControlName="SOUTH" />
+      <ui-textfield
+        variant="outlined"
+        label="Este"
+        placeholder="Límites por el este"
+        [supportingText]="supportingText(EAST)"
+        formControlName="EAST" />
+      <ui-textfield
+        variant="outlined"
+        label="Oeste"
+        placeholder="Límites por el oeste"
+        [supportingText]="supportingText(WEST)"
+        formControlName="WEST" />
+    </div>
+  }
+
+  <footer uiDialogActions>
+    @if (step() === 1) {
+      <ui-button
+        variant="text"
+        type="button"
+        text="Cancelar"
+        (clicked)="onClose(false)" />
+      <ui-button
+        variant="filled-tonal"
+        type="button"
+        text="Siguiente"
+        [disabled]="form.controls.basic.invalid"
+        (clicked)="onClickNext()" />
+    } @else {
+      <ui-button
+        variant="text"
+        type="button"
+        text="Anterior"
+        (clicked)="onClickBack()" />
+      <ui-button
+        variant="outlined"
+        type="button"
+        text="Enviar"
+        [disabled]="form.invalid"
+        (clicked)="onClose(true)" />
+    }
+  </footer>
+</form>

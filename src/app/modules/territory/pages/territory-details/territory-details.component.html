@@ -1,0 +1,141 @@
+<ui-card class="TerritoryDetails-card" variant="filled">
+  <header class="TerritoryDetails-header" ngProjectAs="Card-header">
+    <ui-typescale
+      class="TerritoryDetails-title"
+      style="display: inline"
+      type="title"
+      size="large"
+      [text]="territory!.label" />
+    <div class="TerritoryDetails-trailingIcons">
+      <ui-icon-button
+        type="standard"
+        tooltip="Editar información"
+        icon="edit_fill" />
+      <ui-icon-button type="standard" tooltip="Más opciones" tooltipLayout="right" icon="more_vert" />
+    </div>
+  </header>
+  <section class="TerritoryDetails-map">
+    @if (territory!.urlMapImage) {
+      <img
+        class="TerritoryDetails-mapImage"
+        [ngSrc]="territory!.urlMapImage"
+        alt="Mapa del territorio número {{ territory!.number }}, {{
+          territory!.label
+        }}"
+        fill
+        priority />
+    } @else {
+      <app-empty icon="map_fill" label="Mapa del territorio en construcción" />
+    }
+  </section>
+  <ui-tab type="primary" [blocks]="tabs" (selected)="onSelectedTab($event)" />
+  <section class="TerritoryDetails-content">
+    @switch (selectedTab()) {
+      @case ('limits') {
+        <ui-typescale
+          style="display: inline"
+          type="title"
+          size="medium"
+          text="Este territorio tiene los siguientes límites." />
+        <div>
+          <ui-typescale
+            style="display: inline"
+            type="title"
+            size="medium"
+            text="Limites:" />
+          <ul class="TerritoryDetails-limits">
+            <li class="TerritoryDetails-limit">
+              <ui-typescale
+                style="display: inline"
+                type="title"
+                size="medium"
+                text="Norte:" />
+              <ui-typescale
+                style="display: inline"
+                type="body"
+                size="small"
+                text="{{ territory!.limits.NORTH }}" />
+            </li>
+            <li class="TerritoryDetails-limit">
+              <ui-typescale
+                style="display: inline"
+                type="title"
+                size="medium"
+                text="Sur:" />
+              <ui-typescale
+                style="display: inline"
+                type="body"
+                size="small"
+                text="{{ territory!.limits.SOUTH }}" />
+            </li>
+            <li class="TerritoryDetails-limit">
+              <ui-typescale
+                style="display: inline"
+                type="title"
+                size="medium"
+                text="Este:" />
+              <ui-typescale
+                style="display: inline"
+                type="body"
+                size="small"
+                text="{{ territory!.limits.EAST }}" />
+            </li>
+            <li class="TerritoryDetails-limit">
+              <ui-typescale
+                style="display: inline"
+                type="title"
+                size="medium"
+                text="Oeste:" />
+              <ui-typescale
+                style="display: inline"
+                type="body"
+                size="small"
+                text="{{ territory!.limits.WEST }}" />
+            </li>
+          </ul>
+        </div>
+      }
+      @case ('meeting-places') {
+        <div>
+          <ui-typescale
+            style="display: inline"
+            type="title"
+            size="medium"
+            text="Id:" />
+          <ui-typescale
+            style="display: inline"
+            type="body"
+            size="small"
+            text="{{ territory!.id }}" />
+        </div>
+        <div>
+          <ui-typescale
+            style="display: inline"
+            type="title"
+            size="medium"
+            text="Nomber:" />
+          <ui-typescale
+            style="display: inline"
+            type="body"
+            size="small"
+            text="{{ territory!.label }}" />
+        </div>
+        <div>
+          <ui-typescale
+            style="display: inline"
+            type="title"
+            size="medium"
+            text="Disponible:" />
+          <ui-typescale
+            style="display: inline"
+            type="body"
+            size="small"
+            text="{{ !territory!.isLocked }}" />
+        </div>
+      }
+      @case ('report') {
+        Trabajando en esta vista
+      }
+    }
+  </section>
+</ui-card>

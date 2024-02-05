@@ -1,0 +1,19 @@
+:host {
+  display: grid;
+  grid-template:
+    100vh /
+    var(--navigator-width) 3fr;
+  grid-template-areas: 'navigator content content content';
+
+  & .Desktop-navigator {
+    grid-area: navigator;
+    width: var(--navigator-width);
+  }
+
+  & .Desktop-content {
+    grid-area: content;
+    scroll-behavior: smooth;
+    height: 100%;
+    overflow: hidden;
+  }
+}
